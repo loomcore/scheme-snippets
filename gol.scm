@@ -96,3 +96,39 @@
 
 (define iterate
   (lambda (b)
+    (let yloop ((y     0)
+                (board b))
+      (cond ((< y (length b)) (cons (let xloop ((x   0)
+                                                (row (car b)))
+                                      (cond ((< x (length (car b))) (cons (live-or-die x y b) (xloop (+ x 1) (cdr row)))))) (yloop (+ y 1) (cdr board))))))))
+
+; (iterate '((#f #t #f) (#f #f #t) (#t #t #t)))
+; (iterate '((#f #t #f) (#f #t #f) (#f #t #f)))
+
+(define row-to-string
+  (lambda (r)
+    (cond ((null? r) "\n")
+          (else (string-append (cond ((car r) "#")
+                                     (else "_"))
+                               (row-to-string (cdr r)))))))
+
+(define board-to-string
+  (lambda (b)
+    (cond ((null? b) "")
+          (else (string-append (row-to-string (car b)) (board-to-string (cdr b)))))))
+
+(define print-board
+  (lambda (b)
+    (print (string-append "\n" (board-to-string b)))))
+
+; (print (row-to-string '(#f #f #t #t #f)))
+; (print (row-to-string '(#t #f #f #f #t)))
+; (print-board '((#f #t #f) (#f #f #t) (#t #t #t)))
+
+(define run
+  (lambda (b)
+    (begin
+      (print-board b)
+      (run (iterate b)))))
+
+; (run '())
