@@ -1,1 +1,40 @@
-README
+scheme-snippets, by Phil Yeeles (loomcore)
+==========================================
+A collection of Scheme nuggets that will hopefully be of use as
+examples in Code Club, or for other Scheme learners.  Developed using
+Chicken, so some (especially those that use the Chicken SRFI
+extensions) may require modification to run properly on other Scheme
+implementations.
+
+Contents:
+---------
+- fib.scm:       Generate a list of Fibonacci numbers up to a
+                 specified limit.
+- fizzbuzz.scm:  Generate a sequence of numbers omitting those with
+                 specified factors, à la the maths game FizzBuzz.
+- gol.scm:       An ASCII implementation of Conway's Game of Life, a
+                 popular cellular automaton (incomplete).
+- quicksort.scm: Use the Quicksort algorithm to sort lists of numbers.
+- sierp.scm:     Generate an ASCII-art Sierpiński Triangle to a
+                 specified depth.
+
+Enjoy!
+
+All code is licensed under the GNU GPL (v3).
+Copyright (C) 2012 P. M. Yeeles
+
+This file is part of scheme-snippets.
+
+scheme-snippets is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+scheme-snippets is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with scheme-snippets.  If not, see
+<http://www.gnu.org/licenses/>.

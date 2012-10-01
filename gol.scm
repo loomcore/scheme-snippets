@@ -1,3 +1,21 @@
+; Copyright (C) 2012 P. M. Yeeles
+;
+; This file is part of scheme-snippets.
+;
+; scheme-snippets is free software: you can redistribute it and/or
+; modify it under the terms of the GNU General Public License as
+; published by the Free Software Foundation, either version 3 of the
+; License, or (at your option) any later version.
+;
+; scheme-snippets is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with scheme-snippets.  If not, see
+; <http://www.gnu.org/licenses/>.
+
 (require-extension srfi-1)
 
 (define rep
@@ -30,7 +48,7 @@
 
 (define bottom?
   (lambda (x y b)
-    (= y (length b))))
+    (= y (- (length b) 1))))
 
 (define left?
   (lambda (x y b)
@@ -38,7 +56,7 @@
 
 (define right?
   (lambda (x y b)
-    (= x (length (car b)))))
+    (= x (- (length (car b)) 1))))
 
 (define get-neighbours
   (lambda (x y b)
@@ -94,13 +112,30 @@
       (cond ((get-cell x y b) (or (= 2 n) (= 3 n)))
             (else (= 3 n))))))
 
+; (define iterate
+;   (lambda (b)
+;     (let yloop ((y     0)
+;                 (board b))
+;       (cond ((< y (length b)) (cons (let xloop ((x   0)
+;                                                 (row (car b)))
+;                                       (cond ((< x (length (car b))) (cons (live-or-die x y b) (xloop (+ x 1) (cdr row)))))) (yloop (+ y 1) (cdr board))))))))
+
 (define iterate
   (lambda (b)
-    (let yloop ((y     0)
-                (board b))
-      (cond ((< y (length b)) (cons (let xloop ((x   0)
-                                                (row (car b)))
-                                      (cond ((< x (length (car b))) (cons (live-or-die x y b) (xloop (+ x 1) (cdr row)))))) (yloop (+ y 1) (cdr board))))))))
+    (let yl ((y  0)
+             (ob b)
+             (nb '()))
+      (cond ((null? ob) (reverse nb))
+            (else (yl (+ y 1)
+                      (cdr ob)
+                      (cons (let xl ((x  0)
+                                     (or (car ob))
+                                     (nr '()))
+                              (cond ((null? or) (reverse nr))
+                                    (else (xl (+ x 1)
+                                              (cdr or)
+                                              (cons (live-or-die x y b) nr)))))
+                            nb)))))))
 
 ; (iterate '((#f #t #f) (#f #f #t) (#t #t #t)))
 ; (iterate '((#f #t #f) (#f #t #f) (#f #t #f)))
