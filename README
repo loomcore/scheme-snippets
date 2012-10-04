@@ -8,6 +8,8 @@ implementations.
 
 Contents:
 ---------
+- expanded.scm:  Transform an S-expression into a well-laid-out
+                 calculation using the `expanded method' (incomplete).
 - fib.scm:       Generate a list of Fibonacci numbers up to a
                  specified limit.
 - fizzbuzz.scm:  Generate a sequence of numbers omitting those with
