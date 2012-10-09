@@ -19,6 +19,8 @@ Contents:
 - quicksort.scm: Use the Quicksort algorithm to sort lists of numbers.
 - sierp.scm:     Generate an ASCII-art Sierpiński Triangle to a
                  specified depth.
+- subtract.scm:  Solve a subtraction problem for two-digit numbers
+                 using the `expanded method'.
 
 Enjoy!
 

@@ -67,15 +67,24 @@
 ; TODO: fix +s between translations of sexps, see test below
 (define part->string
   (lambda (e)
-    (let loop ((l (cdr e))
+    (let loop ((l (reverse (cdr e)))
                (n 0)
                (s ""))
       (cond ((null? l) s)
-            ((list? (car l)) (loop (cdr l) (+ n 1) (string-append (part->string (car l)) s)))
+            ((list? (car l)) (loop (cdr l) (+ n 1) (string-append "\n" (part->string (car l)) s)))
             ((odd? n) (loop l (+ n 1) (string-append "+" s)))
             (else (loop (cdr l) (+ n 1) (string-append (number->string (car l)) s)))))))
 
-; (part->string (expanded-sexp '(+ 123 4567)))
+(define part->stringlist
+  (lambda (e)
+    (let loop ((in  (reverse (cdr e)))
+               (out '()))
+      (cond ((null? in) out)
+            ((list? (car in)) (loop (cdr in) (cons (part->stringlist (car in)) out)))
+            (else (loop (cdr l) (cons (part->string (car in)) out)))))))
+
+; (print (part->string (expanded-sexp '(+ 123 4567))))
+; (part->stringlist (expanded-sexp '(+ 123 4567)))
 
 (define expanded
   (lambda (e)
