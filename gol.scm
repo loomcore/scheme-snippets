@@ -16,7 +16,24 @@
 ; along with scheme-snippets.  If not, see
 ; <http://www.gnu.org/licenses/>.
 
+; TODO: fix wacky behaviour of get-neighbours
+;       (try (get-neighbours 1 0 tb) and (get-neighbours 1 0 (iterate tb)) to see
+;       that it's weird: former returns '(#f #f #f #f #f), latter returns
+;       '(#t #t #t #t #t) :\)
+
 (require-extension srfi-1)
+
+; ugh.  just... ugh.  i'm so sorry.
+(define carp
+  (lambda (l)
+    (cond ((null? l) '())
+          (else (car l)))))
+
+; ditto
+(define cdrp
+  (lambda (l)
+    (cond ((null? l) '())
+          (else (cdr l)))))
 
 (define rep
   (lambda (x n)
@@ -25,8 +42,8 @@
 
 (define nth
   (lambda (n l)
-    (cond ((= n 0) (car l))
-          (else (nth (- n 1) (cdr l))))))
+    (cond ((= n 0) (carp l))
+          (else (nth (- n 1) (cdrp l))))))
 
 (define blank-board
   (lambda (x y)
@@ -56,7 +73,7 @@
 
 (define right?
   (lambda (x y b)
-    (= x (- (length (car b)) 1))))
+    (= x (- (length (carp b)) 1))))
 
 (define get-neighbours
   (lambda (x y b)
@@ -117,8 +134,8 @@
 ;     (let yloop ((y     0)
 ;                 (board b))
 ;       (cond ((< y (length b)) (cons (let xloop ((x   0)
-;                                                 (row (car b)))
-;                                       (cond ((< x (length (car b))) (cons (live-or-die x y b) (xloop (+ x 1) (cdr row)))))) (yloop (+ y 1) (cdr board))))))))
+;                                                 (row (carp b)))
+;                                       (cond ((< x (length (carp b))) (cons (live-or-die x y b) (xloop (+ x 1) (cdrp row)))))) (yloop (+ y 1) (cdrp board))))))))
 
 (define iterate
   (lambda (b)
@@ -127,30 +144,35 @@
              (nb '()))
       (cond ((null? ob) (reverse nb))
             (else (yl (+ y 1)
-                      (cdr ob)
+                      (cdrp ob)
                       (cons (let xl ((x  0)
-                                     (or (car ob))
+                                     (or (carp ob))
                                      (nr '()))
                               (cond ((null? or) (reverse nr))
                                     (else (xl (+ x 1)
-                                              (cdr or)
+                                              (cdrp or)
                                               (cons (live-or-die x y b) nr)))))
                             nb)))))))
 
 ; (iterate '((#f #t #f) (#f #f #t) (#t #t #t)))
 ; (iterate '((#f #t #f) (#f #t #f) (#f #t #f)))
+; (define tb '((#f #t #f) (#f #t #f) (#f #t #f)))
+; (iterate (iterate '((#f #t #f) (#f #t #f) (#f #t #f))))
+; (print-board (iterate '((#f #t #f) (#f #t #f) (#f #t #f))))
+; (print-board (iterate (iterate '((#f #t #f) (#f #t #f) (#f #t #f)))))
+; (print-board (iterate (iterate (iterate '((#f #t #f) (#f #t #f) (#f #t #f))))))
 
 (define row-to-string
   (lambda (r)
     (cond ((null? r) "\n")
-          (else (string-append (cond ((car r) "#")
-                                     (else "_"))
-                               (row-to-string (cdr r)))))))
+          (else (string-append (cond ((carp r) "▓") ; or "#"
+                                     (else "░")) ; or "_"
+                               (row-to-string (cdrp r)))))))
 
 (define board-to-string
   (lambda (b)
     (cond ((null? b) "")
-          (else (string-append (row-to-string (car b)) (board-to-string (cdr b)))))))
+          (else (string-append (row-to-string (carp b)) (board-to-string (cdrp b)))))))
 
 (define print-board
   (lambda (b)
@@ -167,3 +189,4 @@
       (run (iterate b)))))
 
 ; (run '())
+; (run '((#f #t #f) (#f #t #f) (#f #t #f)))
